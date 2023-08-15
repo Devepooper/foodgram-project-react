@@ -17,11 +17,11 @@ from api.filters import IngredientFilter, RecipeFilter
 from api.pagination import CustomPagination
 from api.permissions import IsAuthorOrAdminOrReadOnly
 from api.serializers import (CreateRecipeSerializer, FavoriteSerializer,
-                          IngredientSerializer, RecipeSerializer,
-                          ShoppingCartSerializer, ShowSubscriptionsSerializer,
-                          SubscriptionSerializer, TagSerializer)
+                            IngredientSerializer, RecipeSerializer,
+                            ShoppingCartSerializer, ShowSubscriptionsSerializer,
+                            SubscriptionSerializer, TagSerializer)
 
-SHOP_LIST = 'shopping_list' 
+SHOP_LIST = 'shopping_list'
 
 
 class SubscribeView(APIView):
