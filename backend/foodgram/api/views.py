@@ -18,7 +18,7 @@ from api.pagination import CustomPagination
 from api.permissions import IsAuthorOrAdminOrReadOnly
 from api.serializers import (CreateRecipeSerializer, FavoriteSerializer,
                              IngredientSerializer, RecipeSerializer,
-                             ShoppingCartSerializer, 
+                             ShoppingCartSerializer,
                              ShowSubscriptionsSerializer,
                              SubscriptionSerializer, TagSerializer)
 
