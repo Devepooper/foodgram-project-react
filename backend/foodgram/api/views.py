@@ -13,19 +13,21 @@ from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 from users.models import Subscription, User
 
-from .filters import IngredientFilter, RecipeFilter
-from .pagination import CustomPagination
-from .permissions import IsAuthorOrAdminOrReadOnly
-from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
+from api.filters import IngredientFilter, RecipeFilter
+from api.pagination import CustomPagination
+from api.permissions import IsAuthorOrAdminOrReadOnly
+from api.serializers import (CreateRecipeSerializer, FavoriteSerializer,
                           IngredientSerializer, RecipeSerializer,
                           ShoppingCartSerializer, ShowSubscriptionsSerializer,
                           SubscriptionSerializer, TagSerializer)
+
+SHOP_LIST = 'shopping_list' 
 
 
 class SubscribeView(APIView):
     """ Операция подписки/отписки. """
 
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, id):
         data = {
@@ -188,7 +190,6 @@ def download_shopping_cart(request):
         )
         if num < ingredients.count() - 1:
             ingredient_list += ', '
-    file = 'shopping_list'
     response = HttpResponse(ingredient_list, 'Content-Type: application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="{file}.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="{SHOP_LIST}.pdf"'
     return response

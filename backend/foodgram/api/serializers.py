@@ -7,6 +7,8 @@ from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             RecipeTag, ShoppingCart, Tag)
 from users.models import Subscription, User
 
+NUM = 1
+
 
 class CustomUserCreateSerializer(UserCreateSerializer):
     """ Сериализатор создания пользователя. """
@@ -18,7 +20,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
             'username',
             'first_name',
             'last_name',
-            'password'
+            'password',
         ]
 
 
@@ -35,7 +37,7 @@ class CustomUserSerializer(UserSerializer):
             'username',
             'first_name',
             'last_name',
-            'is_subscribed'
+            'is_subscribed',
         ]
 
     def get_is_subscribed(self, obj):
@@ -100,7 +102,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             'name',
             'image',
             'text',
-            'cooking_time'
+            'cooking_time',
         ]
 
     def get_ingredients(self, obj):
@@ -160,24 +162,24 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
-        list = []
-        for i in ingredients:
-            amount = i['amount']
-            if int(amount) < 1:
+        catalog = []
+        for recipe in ingredients:
+            amount = recipe['amount']
+            if int(amount) < NUM:
                 raise serializers.ValidationError({
                     'amount': 'Количество ингредиента должно быть больше 0!'
                 })
-            if i['id'] in list:
+            if recipe['id'] in catalog:
                 raise serializers.ValidationError({
                     'ingredient': 'Ингредиенты должны быть уникальными!'
                 })
-            list.append(i['id'])
+            catalog.append(recipe['id'])
         return data
 
     def create_ingredients(self, ingredients, recipe):
         for i in ingredients:
             ingredient = Ingredient.objects.get(id=i['id'])
-            RecipeIngredient.objects.create(
+            RecipeIngredient.objects.bulk_create(
                 ingredient=ingredient, recipe=recipe, amount=i['amount']
             )
 
@@ -276,7 +278,7 @@ class ShowSubscriptionsSerializer(serializers.ModelSerializer):
             'last_name',
             'is_subscribed',
             'recipes',
-            'recipes_count'
+            'recipes_count',
         ]
 
     def get_is_subscribed(self, obj):

@@ -19,7 +19,7 @@ class Command(BaseCommand):
                 for line in jsondata:
                     if not Tag.objects.filter(
                        slug=line['slug']).exists():
-                        Tag.objects.create(
+                        Tag.objects.bulk_create(
                             name=line['name'],
                             color=line['color'],
                             slug=line['slug'],
@@ -29,7 +29,7 @@ class Command(BaseCommand):
                     if not Ingredient.objects.filter(
                        name=line['name'],
                        measurement_unit=line['measurement_unit']).exists():
-                        Ingredient.objects.create(
+                        Ingredient.objects.bulk_create(
                             name=line['name'],
                             measurement_unit=line['measurement_unit']
                         )
