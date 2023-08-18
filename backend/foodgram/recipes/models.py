@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 
-NUM = 1
+MIN_TIME = 1
 
 
 class Ingredient(models.Model):
@@ -75,7 +75,7 @@ class Recipe(models.Model):
     cooking_time = models.PositiveIntegerField(
         verbose_name='Время приготовления',
         validators=[MinValueValidator(
-            NUM, message='Время приготовления должно быть не менее 1 минуты!'
+            MIN_TIME, message=f'Время приготовления должно быть не менее {MIN_TIME} минут(ы)!'
         )]
     )
     pub_date = models.DateTimeField(

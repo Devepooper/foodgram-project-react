@@ -2,6 +2,7 @@ from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+from django.db import transaction
 
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             RecipeTag, ShoppingCart, Tag)
@@ -162,8 +163,8 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
-        catalog = []
-        for recipe in ingredients:
+        catalog = [None] * len(ingredients)
+        for indx, recipe in enumerate(ingredients):
             amount = recipe['amount']
             if int(amount) < NUM:
                 raise serializers.ValidationError({
@@ -173,15 +174,19 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError({
                     'ingredient': 'Ингредиенты должны быть уникальными!'
                 })
-            catalog.append(recipe['id'])
+            catalog[indx] = recipe['id']
         return data
 
     def create_ingredients(self, ingredients, recipe):
+        ingredient_instances = []
+
         for i in ingredients:
             ingredient = Ingredient.objects.get(id=i['id'])
-            RecipeIngredient.objects.bulk_create(
-                ingredient=ingredient, recipe=recipe, amount=i['amount']
-            )
+            ingredient_instances.append(RecipeIngredient(ingredient=ingredient, 
+                                                         recipe=recipe, amount=i['amount']))
+
+        with transaction.atomic():
+            RecipeIngredient.objects.bulk_create(ingredient_instances)
 
     def create_tags(self, tags, recipe):
         for tag in tags:
