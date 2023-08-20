@@ -16,7 +16,7 @@ services:
   backend:
     image: deonisg/food_backend
     volumes:
-      - ../static/:/app/static/
+      - /static/:/app/static/
       - ../media/:/app/media/recipes/
     depends_on:
       - db
@@ -33,7 +33,7 @@ services:
   nginx:
     image: nginx:1.19.3
     ports:
-      - "80:80"
+      - "80:8001"
     volumes:
       - ../static/:/var/html/static/
       - ../media/:/var/html/media/recipes/
