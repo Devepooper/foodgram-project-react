@@ -4,7 +4,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.getenv('TOKEN')
+SECRET_KEY = 'django-insecure-x*#fa8u91=ju)(wncaa((!@d-jidxh8n&kej4rcye*fw3dh%3&'
 
 DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
 
@@ -58,13 +58,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'deonisg',
-        'USER': 'deonisg',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'default': {
+            'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
+            'NAME': os.getenv('DB_NAME', default='deonisg'),
+            'USER': os.getenv('POSTGRES_USER', default='deonisg'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='password123321'),
+            'HOST': os.getenv('DB_HOST', default='db'),
+            'PORT': os.getenv('DB_PORT', default='5432'),
     }
 }
 
