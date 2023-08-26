@@ -31,11 +31,10 @@ services:
       - db
 
   nginx:
-    image: nginx:1.19.3
+    image: deonisg/nginx_food
     ports:
       - 8000:80
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
       - ../docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
